@@ -1,2 +1,90 @@
-# Auto detect text files and perform LF normalization
-* text=auto
+using System;
+
+namespace DNAReplicator
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            while (true)
+            {
+                Console.Write("First half of DNA : ");
+                string dnasequenceHalf = Console.ReadLine();
+
+                if (IsValidSequence(dnasequenceHalf))
+                {
+                    Console.WriteLine($"Current half DNA sequence : {dnasequenceHalf}");
+                    Console.Write("Do you want to replicate it ? (Y/N) : ");
+                    char replicationChoice = GetUserChoice();
+
+                    if (replicationChoice == 'Y')
+                    {
+                        string replicatedsequence = ReplicateSeqeunce(dnasequenceHalf);
+                        Console.WriteLine($"Replicated half DNA sequence : {replicatedsequence}");
+                    }
+
+                    Console.Write("Do you want to process another sequence ? (Y/N) : ");
+                    char continueChoice = GetUserChoice();
+
+                    if (continueChoice == 'N')
+                    {
+                        break;
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("That half DNA sequence is invalid.");
+                    Console.Write("Do you want to process another sequence ? (Y/N) : ");
+                    char continueChoice = GetUserChoice();
+
+                    if (continueChoice == 'N')
+                    {
+                        break;
+                    }
+                }
+            }
+        }
+
+        static bool IsValidSequence(string halfDNASequence)
+        {
+            foreach (char nucleotide in halfDNASequence)
+            {
+                if (!"ATCG".Contains(nucleotide))
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        static string ReplicateSeqeunce(string halfDNASequence)
+        {
+            string result = "";
+            foreach (char nucleotide in halfDNASequence)
+            {
+                result += "TAGC"["ATCG".IndexOf(nucleotide)];
+            }
+            return result;
+        }
+
+        static char GetUserChoice()
+        {
+            char choice;
+            while (true)
+            {
+                choice = char.ToUpper(Console.ReadKey().KeyChar);
+                Console.WriteLine();
+
+                if (choice == 'Y' || choice == 'N')
+                {
+                    break;
+                }
+                else
+                {
+                    Console.Write("Please input Y or N.\nDo you want to process another sequence ? (Y/N) : ");
+                }
+            }
+            return choice;
+        }
+    }
+}
